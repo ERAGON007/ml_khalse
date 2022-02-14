@@ -16,7 +16,7 @@ jobs:
       if: ${{ matrix.os == 'ubuntu-latest' }}
       run: mkdir ${{ GITHUB.WORKSPACE }}/OutputArtifact && cp khalse_pm/target/release/*.so ${{ GITHUB.WORKSPACE }}/OutputArtifact/
     - name: Prepare output [Windows]
-      if: ${{ matrix.os == 'ubuntu-latest' }}
+      if: ${{ matrix.os == 'windows-latest' }}
       run: mkdir ${{ GITHUB.WORKSPACE }}/OutputArtifact && copy khalse_pm/target/release/*.dll ${{ GITHUB.WORKSPACE }}/OutputArtifact/
     - name: Create artifact
       uses: 'actions/upload-artifact@v2'
