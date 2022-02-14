@@ -1,0 +1,26 @@
+name: Build
+on: [push, pull_request]
+env:
+  CARGO_TERM_COLOR: always
+jobs:
+  build:
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build
+      run: cd khalse_pm && cargo build --release --verbose
+    - name: Prepare output [Linux]
+      if: ${{ matrix.os == 'ubuntu-latest' }}
+      run: mkdir ${{ GITHUB.WORKSPACE }}/OutputArtifact && cp khalse_pm/target/release/*.so ${{ GITHUB.WORKSPACE }}/OutputArtifact/
+    - name: Prepare output [Windows]
+      if: ${{ matrix.os == 'windows-latest' }}
+      run: mkdir ${{ GITHUB.WORKSPACE }}/OutputArtifact && copy khalse_pm/target/release/*.dll ${{ GITHUB.WORKSPACE }}/OutputArtifact/
+    - name: Create artifact
+      uses: 'actions/upload-artifact@v2'
+      with:
+          name: "InstallFiles"
+          path: '${{ GITHUB.WORKSPACE }}/OutputArtifact/*'
+          if-no-files-found: error
